@@ -1,4 +1,4 @@
-SpringBoot CloneProject : Springboot-Cloneproject-Daangn 
+Springboot-Cloneproject-Daangn-당근마켓
 =====================
 
 참여인원 : 백앤드 2명 (김동현, 채수연) / 프론트 2명 (김광수, 박민경)  
