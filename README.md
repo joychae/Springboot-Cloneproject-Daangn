@@ -1,8 +1,8 @@
 SpringBoot CloneProject : Springboot-Cloneproject-Daangn 
 =====================
 
-참여인원 : 백앤드 2명 (김동현, 채수연) / 프론트 2명 (김광수, 박민경)
-프로젝트 백앤드 url: http://54.180.112.53:8080/api/hot_articles (메인 데이터 목록 url 입니다.)
+참여인원 : 백앤드 2명 (김동현, 채수연) / 프론트 2명 (김광수, 박민경)  
+프로젝트 백앤드 url: http://54.180.112.53:8080/api/hot_articles (메인 데이터 목록 url 입니다.)  
 
 </br>
 
