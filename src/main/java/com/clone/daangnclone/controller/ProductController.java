@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
