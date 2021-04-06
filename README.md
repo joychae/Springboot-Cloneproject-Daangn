@@ -2,7 +2,12 @@ SpringBoot CloneProject : Springboot-Cloneproject-Daangn
 =====================
 
 참여인원 : 백앤드 2명 (김동현, 채수연) / 프론트 2명 (김광수, 박민경)  
-프로젝트 백앤드 url: http://54.180.112.53:8080/api/hot_articles (메인 데이터 목록 url 입니다.)  
+
+
+</br>
+
+프로젝트 백앤드 url: http://54.180.112.53:8080/api/hot_articles ( 메인 데이터 목록 url 입니다.)  
+- 코드 관리 차원에서 클론 코딩 DB 구출을 위한 크롤러 코드는 다른 프로젝트를 만들어 관리하였습니다. ( 크롤러 코드: https://github.com/joychae/Springboot-Cloneproject-Daangn-Crawler )
 
 </br>
 
@@ -73,3 +78,7 @@ com.clone.daangnclone
 │  └─ SecurityUtil.java
 │  │ 
 └─  DanngnCloneApplication
+```
+
+
+
