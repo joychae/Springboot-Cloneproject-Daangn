@@ -22,6 +22,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 회원가입 로직을 처리하는 메소드이다.
+    // username 을 이용해 이미 db에 가입되어 있는 유저인지 확인한 후, db 에 없는 username 이라면 회원가입 로직을 진행합니다.
+    // userDto 에서 username, password(인코딩 수행), nickname 값을 받아 User table 에 저장합니다.
     @Transactional
     public User signup(UserDto userDto) {
         if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {

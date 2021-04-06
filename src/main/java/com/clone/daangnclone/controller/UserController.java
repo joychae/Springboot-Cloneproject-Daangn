@@ -19,11 +19,14 @@ public class UserController {
         this.userService = userService;
     }
 
+    // 아무 의미 없는 테스트용 코드이다.
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
         return ResponseEntity.ok("hello");
     }
 
+    // 회원가입 정보를 받아오는 메소드 이다.
+    // UserDto 를 이용해서 username, password, nickname 값을 받아옵니다.
     @PostMapping("/signup")
     public ResponseEntity<User> signup(
             @Valid @RequestBody UserDto userDto

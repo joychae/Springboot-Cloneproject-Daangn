@@ -19,6 +19,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class AuthController {
+
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -27,9 +28,12 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
+    // 로그인 정보를 받아오는 메소드이다.
+    // LoginDto 를 통해 로그인 하고자 하는 유저의 username 과 password 정보를 받아온다.
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
+        // 중요! 받아온 username 과 password 값으로 인증 전의 Authentication 객체를 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 

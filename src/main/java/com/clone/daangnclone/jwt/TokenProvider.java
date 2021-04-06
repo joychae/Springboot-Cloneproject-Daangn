@@ -88,6 +88,7 @@ public class TokenProvider implements InitializingBean {
 
         User principal = new User(claims.getSubject(), "", authorities);
 
+        // 인증 완료 후의 authentication 객체를 생성한다.
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 

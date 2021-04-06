@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
 
+    // 필수 Config 설정, Springboot 는 passwordEncoder 를 설정해주지 않으며, 이부분은 개발자가 직접 등록해주어야 한다.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -59,26 +60,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                // enable h2-console
                 .and()
                 .headers()
                 .frameOptions()
                 .sameOrigin()
 
-                // 세션을 사용하지 않기 때문에 STATELESS로 설정
+                // 중요! 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
                 .authorizeRequests()
+                // 이하 세 줄의 요청에 대해서는 로그인을 요구하지 않는다.
                 .antMatchers("/api/hello").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/signup").permitAll()
 
+                // 그 외 나머지 요청에 대해서는 로그인을 요구한다.
                 .anyRequest().authenticated()
 
                 .and()
+                // 로그인 요청이 오면, AuthenticationFilter 에 해당하는 JwtFilter 로 요청이 간다.
                 .apply(new JwtSecurityConfig(tokenProvider));
     }
 }
