@@ -82,4 +82,10 @@ com.clone.daangnclone
 ```
 
 
+</br>
+
+API 설계
+---------
+
+<img width="492" alt="clone_api_structure" src="https://user-images.githubusercontent.com/79817873/113748415-6c450e00-9743-11eb-9bfb-ee9faf7db8ce.PNG">
 
