@@ -558,6 +558,7 @@ public class JwtFilter extends GenericFilterBean {
     }
 }
 ```
+### 
 
 ```java
 // JWT 를 생성하고 검증하는 컴포넌트이다.
@@ -658,6 +659,9 @@ public class TokenProvider implements InitializingBean {
 - 토큰 유효성 검사를 통과한다면, tokenProvider의 getAuthentication 메소드가 token 값을 이용해 인증된 Authentication 객체를 반환합니다.
 - 인증 단계가 완료되었습니다!
 
+
+</br>
+
 ## 4) 인증된 사용자 정보를 가져오기 위한 단계
 ### CustomUserDetailsService
 ```java
@@ -692,4 +696,55 @@ public class CustomUserDetailsService implements UserDetailsService {
 }
 
 ```
-- Spring Security의 기본 인터페이스인 
+- Spring Security의 기본 인터페이스인 UserDetailsService를 상속받는다.
+- UserDetails 객체를 만들기 위한 클래스로 활용된다.
+- USerDetails는 따로 implements받은 클래스를 생성하기도, 기존 커스텀 User Entity에 implements하기도 하며 아무 곳에도 implements 하지 않고 사용할 수 있다.
+- UserDetails는 인증에 성공한 사용자의 정보를 가져 올 때 가장 많이 활용되며, Authentication 객체를 구현한 UsernamePasswordAuthenticationToken을 생성하기 위해서도 사용된다.
+
+
+</br>
+
+## 기타) 첫 로그인 시 토큰 생성 단계
+### AuthController
+```java
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/api")
+public class AuthController {
+
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+        this.tokenProvider = tokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
+
+    // 로그인 정보를 받아오는 메소드이다.
+    // LoginDto 를 통해 로그인 하고자 하는 유저의 username 과 password 정보를 받아온다.
+    @PostMapping("/authenticate")
+    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
+
+        // 중요! 받아온 username 과 password 값으로 인증 전의 Authentication 객체를 생성
+        // Authentication 객체를 구현한 UsernamePasswordAuthenticaitonToken 객체를 구현하기 위해서 UserDetails 객체를 이용
+        // 그 과정에서 UserDetailsService 에 접근하고, User Table 에 아이디가 없는 유저라면 loadUserByUsername 의 에러 메시지가 반환된다.
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        // 해당 값을 SecurityContext 에 저장한다.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.createToken(authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+    }
+}
+```
+- username과 password 값을 클라이언트로부터 받아온다.
+- username과 password 값으로 인증 전 UsernamePasswordAuthentication 객체를 만든다. 해당 객체를 생성하는 과정에서 CustomUserDetailsService가 실행되며, User 테이블에 같은 아이디를 사용하는 유저가 없을 시 에러 문구가 반환된다. 매칭되는 아이디를 가진 User가 있다면, UsernamePasswordAuthentication 객체가 만들어진다.
+- 해당 authentication 객체를 가지고 tokenProvider의 createToken 메소드가 token을 만들어 반환해준다.
+- 로그인에 성공한 유저는 해당 token 값을 반환받으며, 이후 get 요청 시 해당 token 값을 헤더에 실어서 보내주면 위에 설명해둔 1~3 단계를 거쳐 필터를 통과하여 인증이 필요한 url 에 접근할 수 있게된다.
