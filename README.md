@@ -243,6 +243,7 @@ public class ProductService {
 public class ProductController {
     private final ProductService productService;
 
+    // 인기 매물 목록 조회
     @GetMapping("/api/hot_articles")
     public List<Product> getPopularProducts() {
         List<Product> popluarlist =  productService.findAllProduct();
@@ -250,11 +251,13 @@ public class ProductController {
         return popluarlist;
     }
 
+    // 인기 매물 상세 조회
     @GetMapping("/api/hot_articles/{id}")
     public Product getProductDetail(@PathVariable String id) {
         return productService.findProductDetail(id);
     }
 
+    // 지역별 매물 목록 조회
     @GetMapping(value = {"/api/region/{val2}/{val3}", "/api/region/{val2}"})
     public List<Product> find_hot( @PathVariable String val2, @PathVariable(required = false) String val3){
         if (val3 == null){
@@ -264,11 +267,13 @@ public class ProductController {
         return productService.find_hot(want);
     }
 
+    // 매물 업로드
     @PostMapping("/api/upload")
     public void PostProduct(@RequestBody ProductRequestDto requestDto){
         productService.createProduct(requestDto);
     }
 
+    // 매물 검색 목록 조회
     @GetMapping("api/search/{query}")
     public List<Product> getSearchResults(@PathVariable String query) {
         return productService.searchProduct(query);
@@ -279,3 +284,64 @@ public class ProductController {
 
 - 비즈니스 로직은 최대한 Service Layer에서 처리하여 Controller 코드를 최대한 간결하게 구성하였습니다. 덕분에 어느 url에 어떤 기능이 매핑되어 있는지 Controller Layer에서 한 눈에 확인하기 수월해졌습니다.
 
+
+</br>
+
+
+</br>
+
+회원가입 기능
+------------------------
+
+### UserController
+```java
+    // 회원가입 정보를 받아오는 메소드 이다.
+    // UserDto 를 이용해서 username, password, nickname 값을 받아옵니다.
+    @PostMapping("/signup")
+    public ResponseEntity<User> signup(
+            @Valid @RequestBody UserDto userDto
+    ) {
+        return ResponseEntity.ok(userService.signup(userDto));
+    }
+```
+
+- UserDto를 활용하여 username, password, nickname 값을 POST 형태로 클라이언트에서 받아옵니다.
+
+### UserService
+```java
+// 회원가입 로직을 처리하는 메소드이다.
+    // username 을 이용해 이미 db에 가입되어 있는 유저인지 확인한 후, db 에 없는 username 이라면 회원가입 로직을 진행합니다.
+    // userDto 에서 username, password(인코딩 수행), nickname 값을 받아 User table 에 저장합니다.
+    @Transactional
+    public User signup(UserDto userDto) {
+        if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+        }
+
+        //빌더 패턴의 장점
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+
+        User user = User.builder()
+                .username(userDto.getUsername())
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .nickname(userDto.getNickname())
+                .authorities(Collections.singleton(authority))
+                .activated(true)
+                .build();
+
+        return userRepository.save(user);
+    }
+```
+- 받아온 username으로 User DB에 겹치는 값이 있는지 확인하고 있다면 에러 메시지를, 없다면 패스워드 인코딩 과정을 거쳐 User Table에 저장합니다.  
+- 이로써 회원가입이 완료됩니다.
+
+
+</br>
+
+
+</br>
+
+JWT를 활용한 로그인 기능
+------------------------
