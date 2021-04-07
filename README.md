@@ -558,7 +558,7 @@ public class JwtFilter extends GenericFilterBean {
     }
 }
 ```
-### 
+### TokenProvider
 
 ```java
 // JWT 를 생성하고 검증하는 컴포넌트이다.
