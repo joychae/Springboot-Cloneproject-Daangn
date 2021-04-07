@@ -309,7 +309,7 @@ public class ProductController {
 
 ### UserService
 ```java
-// 회원가입 로직을 처리하는 메소드이다.
+    // 회원가입 로직을 처리하는 메소드이다.
     // username 을 이용해 이미 db에 가입되어 있는 유저인지 확인한 후, db 에 없는 username 이라면 회원가입 로직을 진행합니다.
     // userDto 에서 username, password(인코딩 수행), nickname 값을 받아 User table 에 저장합니다.
     @Transactional
@@ -336,6 +336,47 @@ public class ProductController {
 ```
 - 받아온 username으로 User DB에 겹치는 값이 있는지 확인하고 있다면 에러 메시지를, 없다면 패스워드 인코딩 과정을 거쳐 User Table에 저장합니다.  
 - 이로써 회원가입이 완료됩니다.
+
+### User
+```java
+@Entity
+@Table(name = "user")
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+
+    @JsonIgnore
+    @Id
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(name = "username", length = 50, unique = true)
+    private String username;
+
+    @JsonIgnore
+    @Column(name = "password", length = 100)
+    private String password;
+
+    @Column(name = "nickname", length = 50)
+    private String nickname;
+
+    @JsonIgnore
+    @Column(name = "activated")
+    private boolean activated;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
+}
+```
+- 회원 정보를 관리하는 User 테이블입니다.
 
 
 </br>
