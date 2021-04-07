@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+// Spring Security 를 사용하기 위해서는 Spring Security Filter Chain 을 사용한다는 것을 명시해야 한다.
+// 이는 WebSecurityConfigurerAdapter 를 상속받은 클래스에 @EnableWebSecurity 어노테이션을 달아주면 해결된다.
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -83,5 +85,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 로그인 요청이 오면, AuthenticationFilter 에 해당하는 JwtFilter 로 요청이 간다.
                 .apply(new JwtSecurityConfig(tokenProvider));
+
     }
 }

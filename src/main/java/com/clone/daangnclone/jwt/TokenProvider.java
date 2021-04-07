@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+// JWT 를 생성하고 검증하는 컴포넌트이다.
+// JWT 에는 토큰 만료 시간이나 회원 권한 정보 등을 저장할 수 있다.
 // InitializingBean 을 implements 한다.
 @Component
 public class TokenProvider implements InitializingBean {
@@ -43,7 +45,6 @@ public class TokenProvider implements InitializingBean {
     }
 
     // 3.InitializingBean 이 생성이 되고 주입을 받은 후에, secret 값을 Base64 Decode 해서 key 변수에 할당한다.
-    // key 값이 secret key 값을 Base64 Decode 해서 만든 값이라는 것을 알 수 있다.
     // 자, 이제 모든 멤버변수가 채워졌다.
     @Override
     public void afterPropertiesSet() {
@@ -63,13 +64,14 @@ public class TokenProvider implements InitializingBean {
 
         // jwt 토큰을 생성해서 리턴한다.
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .setSubject(authentication.getName())  // 정보 저장
+                .claim(AUTHORITIES_KEY, authorities) // 정보 저장
+                .signWith(key, SignatureAlgorithm.HS512) // signature 에 들어갈 키 값과 사용할 암호화 알고리즘 세팅
+                .setExpiration(validity) // set Expire Time
                 .compact();
     }
 
+    // JWT 토큰에서 인증 정보 조회
     // 토큰에 담겨 있는 정보를 이용해 Authentication 객체를 리턴하는 메소드이다.
     // createToken 과 정확히 반대의 역할을 해주는 메소드이다.
     // 토큰을 parameter 로 받아서 토큰으로 claim 을 만들고, 최종적으로는 Authentication 객체를 리턴한다.

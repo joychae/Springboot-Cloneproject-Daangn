@@ -15,6 +15,8 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
     }
 
     // configure 메소드를 오버라이드 해서 JwtFilter 를 통해 Security 로직에 필터를 등록한다.
+    // UsernamePasswordAuthenticationFilter 가 실행되기 전에 커스텀한 JwtFilter 가 실행되도록 지정한다.
+    // 이를 SecurityConfig 흐름에도 적용시켜 주어야 한다.
     @Override
     public void configure(HttpSecurity http) {
         JwtFilter customFilter = new JwtFilter(tokenProvider);

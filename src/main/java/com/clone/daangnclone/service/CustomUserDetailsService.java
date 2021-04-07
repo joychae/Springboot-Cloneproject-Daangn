@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// 토큰에 저장된 유저 정보를 활용해야 하기 때문에 CustomUserDetailService 라는 이름의 클래스를 만든다.
 @Component("userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;

@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+// TokenProvider 로 토큰을 생성하고 검증하는 컴포넌트를 완성했지만, 실제로 이 컴포넌트를 이용해 인증 작업을 진행하는 것은 Filter 이다.
 public class JwtFilter extends GenericFilterBean {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
