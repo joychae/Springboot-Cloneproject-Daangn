@@ -696,10 +696,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 }
 
 ```
-- Spring Security의 기본 인터페이스인 UserDetailsService를 상속받는다.
-- UserDetails 객체를 만들기 위한 클래스로 활용된다.
-- USerDetails는 따로 implements받은 클래스를 생성하기도, 기존 커스텀 User Entity에 implements하기도 하며 아무 곳에도 implements 하지 않고 사용할 수 있다.
-- UserDetails는 인증에 성공한 사용자의 정보를 가져 올 때 가장 많이 활용되며, Authentication 객체를 구현한 UsernamePasswordAuthenticationToken을 생성하기 위해서도 사용된다.
+- Spring Security의 기본 인터페이스인 UserDetailsService를 상속받습니다.
+- UserDetails 객체를 만들기 위한 클래스로 활용됩니다.
+- USerDetails는 따로 implements받은 클래스를 생성하기도, 기존 커스텀 User Entity에 implements하기도 하며 아무 곳에도 implements 하지 않고 사용할 수 있습니다.
+- UserDetails는 인증에 성공한 사용자의 정보를 가져 올 때 가장 많이 활용되며, Authentication 객체를 구현한 UsernamePasswordAuthenticationToken을 생성하기 위해서도 사용됩니다.
 
 
 </br>
@@ -744,7 +744,7 @@ public class AuthController {
     }
 }
 ```
-- username과 password 값을 클라이언트로부터 받아온다.
-- username과 password 값으로 인증 전 UsernamePasswordAuthentication 객체를 만든다. 해당 객체를 생성하는 과정에서 CustomUserDetailsService가 실행되며, User 테이블에 같은 아이디를 사용하는 유저가 없을 시 에러 문구가 반환된다. 매칭되는 아이디를 가진 User가 있다면, UsernamePasswordAuthentication 객체가 만들어진다.
-- 해당 authentication 객체를 가지고 tokenProvider의 createToken 메소드가 token을 만들어 반환해준다.
-- 로그인에 성공한 유저는 해당 token 값을 반환받으며, 이후 get 요청 시 해당 token 값을 헤더에 실어서 보내주면 위에 설명해둔 1~3 단계를 거쳐 필터를 통과하여 인증이 필요한 url 에 접근할 수 있게된다.
+- username과 password 값을 클라이언트로부터 받아옵니다.
+- username과 password 값으로 인증 전 UsernamePasswordAuthentication 객체를 만든다. 해당 객체를 생성하는 과정에서 CustomUserDetailsService가 실행되며, User 테이블에 같은 아이디를 사용하는 유저가 없을 시 에러 문구가 반환됩니다. 매칭되는 아이디를 가진 User가 있다면, UsernamePasswordAuthentication 객체가 만들어집니다.
+- 해당 authentication 객체를 가지고 tokenProvider의 createToken 메소드가 token을 만들어 반환해줍니다.
+- 로그인에 성공한 유저는 해당 token 값을 반환받으며, 이후 get 요청 시 해당 token 값을 헤더에 실어서 보내주면 위에 설명해둔 1~3 단계를 거쳐 필터를 통과하여 인증이 필요한 url 에 접근할 수 있게됩니다.
