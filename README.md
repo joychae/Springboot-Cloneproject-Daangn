@@ -9,7 +9,8 @@ Springboot-Cloneproject-Daangn-당근마켓
 프로젝트 백앤드 url: http://54.180.112.53:8080/api/hot_articles ( 메인 데이터 목록 url 입니다.)  
 - 코드 관리 차원에서 클론 코딩 DB 구축을 위한 크롤러 코드는 다른 프로젝트를 만들어 관리하였습니다.  
 - 크롤러 코드: https://github.com/joychae/Springboot-Cloneproject-Daangn-Crawler
-- DBMS: Mysql
+
+
 </br>
 
 개발 언어
@@ -28,7 +29,7 @@ Springboot-Cloneproject-Daangn-당근마켓
 - Framework: SpringBoot  
 > - ORM: Spring Data JPA  
 > - Sub-Framework: Spring security  
-
+- DBMS: Mysql
 
 </br>
 
